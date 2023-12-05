@@ -1,6 +1,9 @@
 package aws.aws_study.component;
 
 import aws.aws_study.domain.UploadFile;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,14 +13,13 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class FileStore {
 
-    @Value("${file.dir}")
-    private String fileDir;
+    private final AmazonS3 amazonS3;
 
-    public String getFullPath(String filename){
-        return fileDir + filename;
-    }
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     public UploadFile storeFile(MultipartFile mutiparFile) throws IOException {
 
@@ -27,7 +29,13 @@ public class FileStore {
 
         String originalFiename = mutiparFile.getOriginalFilename();
         String storeFilename = createStoreFileName(originalFiename);
-        mutiparFile.transferTo(new File(getFullPath(storeFilename)));
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(mutiparFile.getSize());
+        metadata.setContentType(mutiparFile.getContentType());
+
+        amazonS3.putObject(bucket, storeFilename, mutiparFile.getInputStream(), metadata);
+
         return new UploadFile(originalFiename, storeFilename);
 
     }
