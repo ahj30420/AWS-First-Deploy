@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>이미지 업로드</title>
+</head>
+<body>
+    <h1>이름과 이미지 업로드</h1>
+    <form action="/img/new" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="nameInput">이름:</label>
+            <input type="text" id="nameInput" name="name">
+        </div>
+        <div>
+            <label for="imageInput">이미지:</label>
+            <input type="file" id="imageInput" name="imageFile">
+        </div>
+        <div>
+            <button type="submit">제출</button>
+        </div>
+    </form>
+</body>
+</html>

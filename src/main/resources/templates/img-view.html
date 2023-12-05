@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>이미지 보기</title>
+</head>
+<body>
+    <h1>Uploaded File</h1>
+    <img th:src="|/img/downloadImage/${filename}|" width="300" height="300"/>
+</body>
+</html>
